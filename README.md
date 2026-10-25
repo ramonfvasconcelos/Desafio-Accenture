@@ -184,6 +184,6 @@ Three defects of the system under test were found and documented in **[docs/bug-
 ## Continuous integration
 
 The pipeline in `.github/workflows/cypress.yml` runs the whole suite in Chrome on every push and pull request, and can also be started by hand (**Actions → Cypress tests → Run workflow**).
-In CI, a failed test is retried once and videos are recorded. The HTML report, screenshots and videos are attached to each run as the `cypress-results` artifact.
+In CI, a failed test is retried once. The HTML report and the screenshots of the failures are attached to each run as the `cypress-results` artifact.
 
 > While BUG-001 and BUG-003 are open, the pipeline finishes with two failed scenarios (Practice Form and the Web Tables bonus), as described above.

@@ -24,8 +24,7 @@ async function setupNodeEvents(on, config) {
 
 module.exports = defineConfig({
   // Kept at the root level (not inside `e2e`), so `--config` on the command line
-  // can override them: `npm run test:ci` turns on retries and videos in CI.
-  video: false,
+  // can override it: `npm run test:ci` turns retries on in CI.
   // Retries stay off locally, so flaky tests are visible.
   retries: 0,
 

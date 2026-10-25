@@ -13,7 +13,7 @@
     "test:api": "cypress run --e2e --expose tags=@api",
     "test:frontend": "cypress run --e2e --expose tags=@frontend",
     "test:smoke": "cypress run --e2e --expose tags=@smoke",
-    "test:ci": "cypress run --e2e --browser chrome --config retries=1,video=true",
+    "test:ci": "cypress run --e2e --browser chrome --config retries=1",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
