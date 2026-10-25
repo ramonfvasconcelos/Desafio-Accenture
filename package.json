@@ -1,0 +1,35 @@
+{
+  "name": "desafio-qa-automation-accenture",
+  "version": "1.0.0",
+  "description": "QA Automation challenge (API + Frontend) using Cypress, Cucumber/Gherkin and the Page Object pattern.",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "cy:open": "cypress open --e2e",
+    "test": "cypress run --e2e",
+    "test:api": "cypress run --e2e --expose tags=@api",
+    "test:frontend": "cypress run --e2e --expose tags=@frontend",
+    "test:smoke": "cypress run --e2e --expose tags=@smoke",
+    "test:ci": "cypress run --e2e --browser chrome --config retries=1,video=true",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^28.0.1",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
+    "@eslint/js": "^10.0.1",
+    "@faker-js/faker": "^10.6.0",
+    "cypress": "^16.2.0",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.13.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-cypress": "^7.0.2",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10"
+  }
+}
