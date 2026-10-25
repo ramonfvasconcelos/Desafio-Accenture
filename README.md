@@ -72,6 +72,7 @@ After a run, an HTML report is created at **`reports/cucumber-report.html`**.
 ```
 .
 ├── .github/workflows/cypress.yml     # CI pipeline (GitHub Actions)
+├── .vscode/settings.json             # Tells the VS Code Cucumber extension where the steps are (Ctrl+click on a step)
 ├── cypress/
 │   ├── e2e/features/
 │   │   ├── api/                      # Part 1 – one .feature per step of the challenge, plus contract and health check
