@@ -2,7 +2,7 @@
  * JSON Schemas (draft-07) of the Book Store API responses used by the challenge.
  * Built from the real responses of https://demoqa.com, since the Swagger page was offline.
  *
- * They describe the CONTRACT of each response: which fields exist, their types and which
+ * They describe the STRUCTURE of each response: which fields exist, their types and which
  * ones are required. `additionalProperties: false` makes any unexpected field fail the test.
  */
 
@@ -36,7 +36,7 @@ const book = {
   additionalProperties: false,
 };
 
-/** Contract names used in the feature files -> schema. */
+/** Schema names used in the feature files -> schema. */
 export const SCHEMAS = {
   // POST /Account/v1/User (201)
   'user created': {

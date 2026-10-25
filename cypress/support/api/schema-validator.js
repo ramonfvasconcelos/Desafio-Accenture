@@ -3,21 +3,21 @@ import addFormats from 'ajv-formats';
 import { SCHEMAS } from './schemas';
 
 /*
- * Validates API responses against their JSON Schema (contract), using Ajv.
+ * Validates API responses against their JSON Schema, using Ajv.
  * `allErrors` reports every broken rule at once, not only the first one.
  */
 const ajv = new Ajv({ allErrors: true });
 addFormats(ajv);
 
 /**
- * @param {string} contractName - a key of SCHEMAS, e.g. "user created"
+ * @param {string} schemaName - a key of SCHEMAS, e.g. "user created"
  * @param {unknown} body - the response body
  * @returns {{ valid: boolean, errors: string }}
  */
-export function validateContract(contractName, body) {
-  const schema = SCHEMAS[contractName];
+export function validateSchema(schemaName, body) {
+  const schema = SCHEMAS[schemaName];
   if (!schema) {
-    throw new Error(`Unknown contract "${contractName}". Use: ${Object.keys(SCHEMAS).join(', ')}.`);
+    throw new Error(`Unknown schema "${schemaName}". Use: ${Object.keys(SCHEMAS).join(', ')}.`);
   }
 
   const validate = ajv.compile(schema);

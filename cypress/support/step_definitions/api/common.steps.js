@@ -1,5 +1,5 @@
 import { Then } from '@badeball/cypress-cucumber-preprocessor';
-import { validateContract } from '../../api/contract-validator';
+import { validateSchema } from '../../api/schema-validator';
 
 /*
  * Response checks shared by every API feature.
@@ -17,9 +17,9 @@ Then('the error message should be {string}', function (message) {
   expect(this.response.body.message).to.eq(message);
 });
 
-Then('the response should match the {string} contract', function (contractName) {
-  const { valid, errors } = validateContract(contractName, this.response.body);
-  expect(valid, `"${contractName}" contract: ${errors}`).to.be.true;
+Then('the response should match the {string} schema', function (schemaName) {
+  const { valid, errors } = validateSchema(schemaName, this.response.body);
+  expect(valid, `"${schemaName}" schema: ${errors}`).to.be.true;
 });
 
 Then('the response time should be under {int} ms', function (limit) {

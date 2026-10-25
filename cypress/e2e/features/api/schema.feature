@@ -1,5 +1,5 @@
-@api @contract
-Feature: API contracts
+@api @schema
+Feature: API response schemas
   As a consumer of the Book Store API
   I want every response to keep its structure
   So that a change in fields or types is caught even when the status code is still right
@@ -8,51 +8,51 @@ Feature: API contracts
   # which fields exist, their types and which ones are required. Unexpected fields fail the test.
 
   @positive
-  Scenario: Create user - response contract
+  Scenario: Create user - response schema
     Given I have valid credentials for a new user
     When I create the user
     Then the response status should be 201
-    And the response should match the "user created" contract
+    And the response should match the "user created" schema
 
   @positive
-  Scenario: Generate token - response contract
+  Scenario: Generate token - response schema
     Given a user is already registered
     When I generate an access token
     Then the response status should be 200
-    And the response should match the "token" contract
+    And the response should match the "token" schema
 
   @positive
-  Scenario: Authorized - response contract
+  Scenario: Authorized - response schema
     Given a user is registered and authorized
     When I check whether the user is authorized
     Then the response status should be 200
-    And the response should match the "authorization" contract
+    And the response should match the "authorization" schema
 
   @positive
-  Scenario: List books - response contract
+  Scenario: List books - response schema
     When I list the available books
     Then the response status should be 200
-    And the response should match the "book list" contract
+    And the response should match the "book list" schema
 
   @positive
-  Scenario: Rent books - response contract
+  Scenario: Rent books - response schema
     Given a user is registered and authorized
     When I list the available books
     And I rent 2 books from the list
     Then the response status should be 201
-    And the response should match the "books added" contract
+    And the response should match the "books added" schema
 
   @positive
-  Scenario: User details - response contract
+  Scenario: User details - response schema
     Given a user is registered and authorized
     And the user has rented 2 books
     When I request the user details
     Then the response status should be 200
-    And the response should match the "user details" contract
+    And the response should match the "user details" schema
 
   @negative
-  Scenario: Error - response contract
+  Scenario: Error - response schema
     Given I have credentials with empty username and empty password
     When I create the user
     Then the response status should be 400
-    And the response should match the "error" contract
+    And the response should match the "error" schema

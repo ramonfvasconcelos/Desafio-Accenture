@@ -14,7 +14,7 @@
     "test:frontend": "cypress run --e2e --expose tags=@frontend",
     "test:smoke": "cypress run --e2e --expose tags=@smoke",
     "test:health": "cypress run --e2e --expose tags=@health",
-    "test:contract": "cypress run --e2e --expose tags=@contract",
+    "test:schema": "cypress run --e2e --expose tags=@schema",
     "test:ci": "cypress run --e2e --browser chrome --config retries=1",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

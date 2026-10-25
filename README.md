@@ -3,10 +3,10 @@
 Automated tests for the [demoqa.com](https://demoqa.com) QA Automation challenge, written with
 **Cypress**, **Cucumber (Gherkin)** and **JavaScript**, following the **Page Object** pattern.
 
-| Part                  | What is tested                                                                                                                                                 | Scenarios |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| **Part 1 – API**      | Book Store API: create a user, generate a token, check authorization, list books, rent two books, show the user details – plus contract and health check tests | 41        |
-| **Part 2 – Frontend** | Practice Form, Browser Windows, Web Tables (with bonus), Progress Bar, Sortable                                                                                | 6         |
+| Part                  | What is tested                                                                                                                                               | Scenarios |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
+| **Part 1 – API**      | Book Store API: create a user, generate a token, check authorization, list books, rent two books, show the user details – plus schema and health check tests | 45        |
+| **Part 2 – Frontend** | Practice Form, Browser Windows, Web Tables (with bonus), Progress Bar, Sortable                                                                              | 6         |
 
 The whole suite runs with a single command: `npm test`.
 
@@ -34,7 +34,7 @@ The whole suite runs with a single command: `npm test`.
 | [Cypress](https://www.cypress.io)                                                                    | 16      | Test runner for API and frontend            |
 | [@badeball/cypress-cucumber-preprocessor](https://github.com/badeball/cypress-cucumber-preprocessor) | 28      | Runs Gherkin `.feature` files in Cypress    |
 | [@faker-js/faker](https://fakerjs.dev)                                                               | 10      | Random test data                            |
-| [Ajv](https://ajv.js.org) + ajv-formats                                                              | 8 / 3   | JSON Schema validation of the API contracts |
+| [Ajv](https://ajv.js.org) + ajv-formats                                                              | 8 / 3   | JSON Schema validation of the API responses |
 | ESLint + eslint-plugin-cypress                                                                       | 10 / 7  | Code quality and Cypress best practices     |
 | Prettier + EditorConfig                                                                              | 3       | Consistent formatting                       |
 | GitHub Actions                                                                                       | –       | Runs the suite on every push                |
@@ -51,17 +51,17 @@ npm install
 
 ## How to run
 
-| Command                 | What it does                                           |
-| ----------------------- | ------------------------------------------------------ |
-| `npm test`              | Runs the whole suite (API + frontend)                  |
-| `npm run test:api`      | Runs only Part 1 (`@api`)                              |
-| `npm run test:frontend` | Runs only Part 2 (`@frontend`)                         |
-| `npm run test:smoke`    | Runs only the main flows (`@smoke`)                    |
-| `npm run test:health`   | Checks that the demoqa APIs are up (`@health`)         |
-| `npm run test:contract` | Runs only the API contract tests (`@contract`)         |
-| `npm run cy:open`       | Opens the Cypress app, to watch the tests step by step |
-| `npm run lint`          | Checks the code with ESLint                            |
-| `npm run format:check`  | Checks the formatting with Prettier                    |
+| Command                 | What it does                                                  |
+| ----------------------- | ------------------------------------------------------------- |
+| `npm test`              | Runs the whole suite (API + frontend)                         |
+| `npm run test:api`      | Runs only Part 1 (`@api`)                                     |
+| `npm run test:frontend` | Runs only Part 2 (`@frontend`)                                |
+| `npm run test:smoke`    | Runs only the main flows (`@smoke`)                           |
+| `npm run test:health`   | Checks that every endpoint of the challenge is up (`@health`) |
+| `npm run test:schema`   | Runs only the API schema tests (`@schema`)                    |
+| `npm run cy:open`       | Opens the Cypress app, to watch the tests step by step        |
+| `npm run lint`          | Checks the code with ESLint                                   |
+| `npm run format:check`  | Checks the formatting with Prettier                           |
 
 Any tag combination also works, for example: `npx cypress run --expose tags="@api and @negative"`.
 
@@ -75,11 +75,11 @@ After a run, an HTML report is created at **`reports/cucumber-report.html`**.
 ├── .vscode/settings.json             # Tells the VS Code Cucumber extension where the steps are (Ctrl+click on a step)
 ├── cypress/
 │   ├── e2e/features/
-│   │   ├── api/                      # Part 1 – one .feature per step of the challenge, plus contract and health check
+│   │   ├── api/                      # Part 1 – one .feature per step of the challenge, plus schema and health check
 │   │   └── frontend/                 # Part 2 – one .feature per screen
 │   ├── fixtures/upload.txt           # File uploaded in the Practice Form
 │   └── support/
-│       ├── api/                      # Service Objects (one method per endpoint), JSON Schemas and contract validator
+│       ├── api/                      # Service Objects (one method per endpoint), JSON Schemas and schema validator
 │       ├── pages/                    # Page Objects: selectors and actions of each screen
 │       ├── factories/                # Random test data
 │       ├── step_definitions/         # Glue between Gherkin and the code
@@ -130,7 +130,7 @@ Cypress                     cy.get / cy.click (screens) – cy.request (API, in 
 
 `book-store-journey.feature` runs the 6 steps as **one continuous flow**, exactly as the challenge asks.
 
-On top of that, every endpoint above has a **contract test** in `contract.feature`, and `health-check.feature` checks that both APIs (Account and BookStore) are up.
+On top of that, every endpoint above has a **schema test** in `schema.feature`, and `health-check.feature` checks that each of the 6 endpoints is up.
 
 ### Part 2 – Frontend
 
@@ -158,18 +158,18 @@ All the expected responses were confirmed against the real API before being writ
 | **Decision table**           | Password rules (one rule broken per row); login with valid/wrong username × valid/wrong password |
 | **State transition**         | A user is authorized only after generating a token                                               |
 | **Error guessing**           | Duplicated username, renting the same book twice                                                 |
-| **Contract testing**         | The response of each of the 6 endpoints, and the error format, validated against a JSON Schema   |
-| **Health check**             | Both APIs answer, with the expected status, in less than 3 s                                     |
+| **Schema validation**        | The response of each of the 6 endpoints, and the error format, validated against a JSON Schema   |
+| **Health check**             | Each of the 6 endpoints answers, with the expected status, in less than 3 s                      |
 
-Tags: `@positive`, `@negative`, `@boundary`, `@decision-table`, `@equivalence-partitioning`, `@state-transition`, `@error-guessing`, `@contract`, `@health`.
+Tags: `@positive`, `@negative`, `@boundary`, `@decision-table`, `@equivalence-partitioning`, `@state-transition`, `@error-guessing`, `@schema`, `@health`.
 
 ## Technical decisions
 
 **Cypress 16 – `expose` instead of `env`.** Cypress 16 removed `Cypress.env()`. Public values (the API URL) are set in `expose` and read with `Cypress.expose()`, and the tags are passed with `--expose tags=…`.
 
-**Contract tests – schema validation, not consumer-driven contracts.** Each response is validated against a JSON Schema (`support/api/schemas.js`) with Ajv: fields, types, required fields and formats (`date-time`, `uri`), and `additionalProperties: false`, so a new or missing field fails the test even when the status code is still right. The schemas were built from the real responses, because the Swagger page was offline. Consumer-driven contract testing (for example with Pact) would need access to the provider (the demoqa server) to verify the contracts on its side, which is not possible here.
+**Schema tests – schema validation, not consumer-driven contract testing.** Each response is validated against a JSON Schema (`support/api/schemas.js`) with Ajv: fields, types, required fields and formats (`date-time`, `uri`), and `additionalProperties: false`, so a new or missing field fails the test even when the status code is still right. The schemas were built from the real responses, because the Swagger page was offline. That is why the tests are called schema tests and not contract tests: consumer-driven contract testing (for example with Pact) would need access to the provider (the demoqa server) to verify the contracts on its side, which is not possible here.
 
-**Health check.** demoqa has no `/health` endpoint, so the check uses the lightest public calls, which create no data: `GET /BookStore/v1/Books` (expects 200) and `POST /Account/v1/Authorized` with a user that does not exist (expects 404 "User not found!", which proves the Account API is processing requests). Both must answer in less than 3 s.
+**Health check.** demoqa has no `/health` endpoint, so each of the 6 endpoints of the challenge gets its lightest call, and none of them creates data: empty user data on `POST /Account/v1/User` (expects 400), a user that does not exist on `GenerateToken` (expects 200 with status "Failed") and on `Authorized` (expects 404), `GET /BookStore/v1/Books` (expects 200), and no access token on `POST /BookStore/v1/Books` and `GET /Account/v1/User/{userID}` (both expect 401). An answer with the expected status proves the endpoint is up and processing requests. Each must answer in less than 3 s; otherwise the test fails.
 
 **Third-party scripts.** demoqa.com loads ads and trackers that slow down the pages and throw errors unrelated to the application. They are blocked with `cy.intercept`, and only errors coming from them are ignored; any error from the application still fails the test (`support/utils/third-party.js`).
 
