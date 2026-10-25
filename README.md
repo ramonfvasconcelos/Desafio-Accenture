@@ -175,11 +175,11 @@ Tags: `@positive`, `@negative`, `@boundary`, `@decision-table`, `@equivalence-pa
 
 Three defects of the system under test were found and documented in **[docs/bug-reports.md](docs/bug-reports.md)**, with steps to reproduce, investigation and evidence.
 
-| Id      | Screen        | Defect                                                                             | Effect on the tests                                                                                            |
-| ------- | ------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| BUG-001 | Practice Form | The **Close** button does not close the submission popup                           | The Practice Form scenario **fails on purpose** on its last step: it follows the challenge and clicks Close    |
-| BUG-002 | Progress Bar  | **Reset** clicked right at 100% restarts the bar                                   | The test pauses 1 s at 100% before Reset, as a person would                                                    |
-| BUG-003 | Web Tables    | A new record cannot be deleted on its own (one delete removes all the new records) | The bonus scenario **fails on purpose**: it deletes the 12 records one by one, and the 2nd one is already gone |
+| Id      | Screen        | Defect                                                                                                              | Effect on the tests                                                                                            |
+| ------- | ------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| BUG-001 | Practice Form | The **Close** button does not close the submission popup (its click handler throws `findDOMNode is not a function`) | The Practice Form scenario **fails on purpose** when it clicks Close, as the challenge asks                    |
+| BUG-002 | Progress Bar  | **Reset** clicked right at 100% restarts the bar                                                                    | The test pauses 1 s at 100% before Reset, as a person would                                                    |
+| BUG-003 | Web Tables    | A new record cannot be deleted on its own (one delete removes all the new records)                                  | The bonus scenario **fails on purpose**: it deletes the 12 records one by one, and the 2nd one is already gone |
 
 ## Continuous integration
 
