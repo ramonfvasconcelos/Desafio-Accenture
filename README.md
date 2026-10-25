@@ -176,7 +176,7 @@ Tags: `@positive`, `@negative`, `@boundary`, `@decision-table`, `@equivalence-pa
 
 **Web Tables.** The table shows 10 rows per page, and the bonus creates 12 records (15 with the 3 that already exist). Each record is found with the search box, by its unique email, so the test works no matter which page the record is on. The 12 records live in a Cucumber data table: adding a row creates one more record, with no code change.
 
-**Progress Bar.** The test runs in real time, so the bar movement is visible. It waits for the bar value itself (it stops the bar once it passes 15%, a 10% margin below the 25% limit). The only fixed pause of the project is the 1 s at 100% before Reset, because of BUG-002.
+**Progress Bar.** The bar is moved only by a page timer (`setInterval`, 1% every 100 ms) and makes no server calls. The test takes control of that timer with `cy.clock` (only `setInterval`/`clearInterval`; page loading and server calls stay in real time) and moves it 1% at a time with `cy.tick`. So the bar stops at exactly 20%, before the 25% limit, no matter how slow the machine is. Because of BUG-002, it lets 1 s of page time pass at 100% before Reset, and 1 s more after it to prove the bar stays at 0%.
 
 **Sortable.** The list uses native HTML5 drag and drop. The test reads the current order and, position by position, drags the item that belongs there (`dragstart → dragenter → dragover → drop → dragend`), so it works whatever the initial order is.
 
@@ -189,7 +189,7 @@ Three defects of the system under test were found and documented in **[docs/bug-
 | Id      | Screen        | Defect                                                                                                              | Effect on the tests                                                                                            |
 | ------- | ------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | BUG-001 | Practice Form | The **Close** button does not close the submission popup (its click handler throws `findDOMNode is not a function`) | The Practice Form scenario **fails on purpose** when it clicks Close, as the challenge asks                    |
-| BUG-002 | Progress Bar  | **Reset** clicked right at 100% restarts the bar                                                                    | The test pauses 1 s at 100% before Reset, as a person would                                                    |
+| BUG-002 | Progress Bar  | **Reset** clicked right at 100% restarts the bar                                                                    | The test lets 1 s of page time pass at 100% before Reset, as a person would                                    |
 | BUG-003 | Web Tables    | A new record cannot be deleted on its own (one delete removes all the new records)                                  | The bonus scenario **fails on purpose**: it deletes the 12 records one by one, and the 2nd one is already gone |
 
 ## Continuous integration

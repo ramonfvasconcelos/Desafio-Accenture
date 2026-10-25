@@ -14,7 +14,7 @@ When('I stop the progress bar before 25%', function () {
 });
 
 When('I click the Start button again', function () {
-  progressBarPage.start();
+  progressBarPage.startAgain();
 });
 
 When('the progress bar reaches 100%', function () {

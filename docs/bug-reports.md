@@ -93,7 +93,7 @@ The bar goes back to 0% and immediately starts growing again by itself, until it
 
 ### Workaround in the automated test
 
-The test pauses for 1 s at 100% before clicking Reset, as a person would.
+The test controls the page timer (`cy.clock`) and lets 1 s of page time pass at 100% before clicking Reset, as a person would. It then lets 1 s more pass and checks the bar stays at 0%.
 
 ### Evidence
 
