@@ -32,18 +32,30 @@ The popup stays open. Nothing happens after the click.
 
 ### Investigation
 
-| Check                                                 | Result                                                                   |
-| ----------------------------------------------------- | ------------------------------------------------------------------------ |
-| Elements with the id `closeLargeModal`                | Exactly 1 – the visible "Close" button inside the popup                  |
-| Element on top of the button (something covering it?) | None – the button itself receives the click                              |
-| Real mouse click                                      | Popup stays open                                                         |
-| Programmatic click (`element.click()`)                | Popup stays open                                                         |
-| Reproduced after reopening the popup                  | Yes                                                                      |
-| **Esc** key                                           | Closes the popup (the popup itself can be closed; only the button fails) |
+| Check                                                 | Result                                                                          |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Elements with the id `closeLargeModal`                | Exactly 1 – the visible "Close" button inside the popup                         |
+| Element on top of the button (something covering it?) | None – the button itself receives the click                                     |
+| Real mouse click                                      | Popup stays open                                                                |
+| Programmatic click (`element.click()`)                | Popup stays open                                                                |
+| Reproduced after reopening the popup                  | Yes                                                                             |
+| **Esc** key                                           | Closes the popup (the popup itself can be closed; only the button fails)        |
+| Browser console when clicking **Close**               | `TypeError: Lr.findDOMNode is not a function`, thrown by the button's `onClick` |
+
+### Probable root cause
+
+The click handler of the **Close** button throws `TypeError: Lr.findDOMNode is not a function` and stops before closing the popup.
+`findDOMNode` was removed from React 19, so the popup component (or a library it uses) still calls an API that no longer exists.
+The same error was reported by Cypress in the GitHub Actions run, which fails the test as an uncaught application error.
 
 ### Evidence
 
 ![Popup still open after clicking Close](evidence/bug-001-close-button-does-not-close-popup.jpg)
+
+```
+TypeError: Lr.findDOMNode is not a function
+    at onClick (https://demoqa.com/assets/index-D_rDx8ml.js:36:57250)
+```
 
 ---
 
@@ -122,20 +134,20 @@ In both cases, the records cannot be deleted one by one.
 
 **Reproduction 1 – automated and scripted runs**
 
-| Action (table: Cierra, Alden, Kierra + Lucas, Julia, Pedro) | Result                                                                   |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------ |
-| Delete **Alden** (a record that comes with the page)        | Only Alden is removed ✅                                                 |
-| Delete **Lucas** (first new record)                         | Lucas, Julia and Pedro are removed ❌                                    |
-| Delete **Julia** (new record in the middle)                 | Lucas, Julia and Pedro are removed ❌                                    |
-| Delete **Pedro** (last new record)                          | Lucas, Julia and Pedro are removed ❌                                    |
-| Delete **Lucas** with the search box filtering by his email | Lucas and Julia are removed ❌ (same defect, with or without the search) |
-| Real mouse click on the **Julia** trash icon (2 new records) | Lucas and Julia are removed ❌                                          |
-| Cypress bonus scenario (12 new records), delete **Lucas**   | All 12 new records are removed ❌                                        |
+| Action (table: Cierra, Alden, Kierra + Lucas, Julia, Pedro)  | Result                                                                   |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| Delete **Alden** (a record that comes with the page)         | Only Alden is removed ✅                                                 |
+| Delete **Lucas** (first new record)                          | Lucas, Julia and Pedro are removed ❌                                    |
+| Delete **Julia** (new record in the middle)                  | Lucas, Julia and Pedro are removed ❌                                    |
+| Delete **Pedro** (last new record)                           | Lucas, Julia and Pedro are removed ❌                                    |
+| Delete **Lucas** with the search box filtering by his email  | Lucas and Julia are removed ❌ (same defect, with or without the search) |
+| Real mouse click on the **Julia** trash icon (2 new records) | Lucas and Julia are removed ❌                                           |
+| Cypress bonus scenario (12 new records), delete **Lucas**    | All 12 new records are removed ❌                                        |
 
 **Reproduction 2 – manual run, records typed by hand**
 
-| Action | Result |
-| ------ | ------ |
+| Action                                                  | Result                                |
+| ------------------------------------------------------- | ------------------------------------- |
 | Create new records and click the trash icon of each one | The last 2 records are not deleted ❌ |
 
 **Note:** after a page refresh the table always goes back to its 3 initial records (Cierra, Alden and Kierra), because the page does not keep any data. This is expected and is not part of the defect.

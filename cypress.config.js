@@ -23,6 +23,12 @@ async function setupNodeEvents(on, config) {
 }
 
 module.exports = defineConfig({
+  // Kept at the root level (not inside `e2e`), so `--config` on the command line
+  // can override them: `npm run test:ci` turns on retries and videos in CI.
+  video: false,
+  // Retries stay off locally, so flaky tests are visible.
+  retries: 0,
+
   e2e: {
     baseUrl: 'https://demoqa.com',
     specPattern: 'cypress/e2e/features/**/*.feature',
@@ -33,10 +39,7 @@ module.exports = defineConfig({
     defaultCommandTimeout: 10000,
     requestTimeout: 15000,
     pageLoadTimeout: 60000,
-    video: false,
     screenshotOnRunFailure: true,
-    // Retries stay off so flaky tests are visible; CI enables them via `npm run test:ci`.
-    retries: 0,
     // Public values read in the tests with Cypress.expose() (Cypress 16+).
     expose: {
       apiUrl: 'https://demoqa.com',
