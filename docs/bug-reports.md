@@ -86,3 +86,60 @@ The test pauses for 1 s at 100% before clicking Reset, as a person would.
 ### Evidence
 
 ![Cypress: after Reset, the bar was back at 100%](evidence/bug-002-reset-restarts-progress-bar.png)
+
+---
+
+## BUG-003 – Web Tables: deleting a new record does not delete only that record
+
+| Field              | Value                                                                                                       |
+| ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| **Severity**       | High – the user loses data they did not ask to delete                                                       |
+| **Status**         | Open                                                                                                        |
+| **Found on**       | 2026-10-25                                                                                                  |
+| **Environment**    | https://demoqa.com/webtables – Google Chrome (Windows) and Cypress 16                                       |
+| **Automated test** | `cypress/e2e/features/frontend/web-tables.feature` → _Create 12 records dynamically and delete all of them_ |
+
+### Steps to reproduce
+
+1. Open https://demoqa.com, choose **Elements** and then **Web Tables**.
+2. Click **Add** and create 3 records (for example Lucas, Julia and Pedro).
+3. Click the **Delete** icon of only one of them (for example Julia).
+
+### Expected result
+
+Only the chosen record is removed. The other two stay in the table.
+
+### Actual result
+
+The delete of records created by the user is broken. It was observed in two different ways:
+
+- **Automated and scripted runs:** all the records created by the user are removed at once (Lucas, Julia and Pedro). Only the 3 records that come with the page remain.
+- **Manual run** (records typed by hand, second tester): the last 2 records created could not be deleted.
+
+In both cases, the records cannot be deleted one by one.
+
+### Investigation
+
+**Reproduction 1 – automated and scripted runs**
+
+| Action (table: Cierra, Alden, Kierra + Lucas, Julia, Pedro) | Result                                                                   |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Delete **Alden** (a record that comes with the page)        | Only Alden is removed ✅                                                 |
+| Delete **Lucas** (first new record)                         | Lucas, Julia and Pedro are removed ❌                                    |
+| Delete **Julia** (new record in the middle)                 | Lucas, Julia and Pedro are removed ❌                                    |
+| Delete **Pedro** (last new record)                          | Lucas, Julia and Pedro are removed ❌                                    |
+| Delete **Lucas** with the search box filtering by his email | Lucas and Julia are removed ❌ (same defect, with or without the search) |
+| Real mouse click on the **Julia** trash icon (2 new records) | Lucas and Julia are removed ❌                                          |
+| Cypress bonus scenario (12 new records), delete **Lucas**   | All 12 new records are removed ❌                                        |
+
+**Reproduction 2 – manual run, records typed by hand**
+
+| Action | Result |
+| ------ | ------ |
+| Create new records and click the trash icon of each one | The last 2 records are not deleted ❌ |
+
+**Note:** after a page refresh the table always goes back to its 3 initial records (Cierra, Alden and Kierra), because the page does not keep any data. This is expected and is not part of the defect.
+
+### Evidence
+
+![Cypress: after deleting Lucas, Julia could no longer be found](evidence/bug-003-delete-removes-all-new-records.png)

@@ -173,16 +173,17 @@ Tags: `@positive`, `@negative`, `@boundary`, `@decision-table`, `@equivalence-pa
 
 ## Defects found
 
-Two defects of the system under test were found and documented in **[docs/bug-reports.md](docs/bug-reports.md)**, with steps to reproduce, investigation and evidence.
+Three defects of the system under test were found and documented in **[docs/bug-reports.md](docs/bug-reports.md)**, with steps to reproduce, investigation and evidence.
 
-| Id      | Screen        | Defect                                                   | Effect on the tests                                                                                         |
-| ------- | ------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| BUG-001 | Practice Form | The **Close** button does not close the submission popup | The Practice Form scenario **fails on purpose** on its last step: it follows the challenge and clicks Close |
-| BUG-002 | Progress Bar  | **Reset** clicked right at 100% restarts the bar         | The test pauses 1 s at 100% before Reset, as a person would                                                 |
+| Id      | Screen        | Defect                                                      | Effect on the tests                                                                                            |
+| ------- | ------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| BUG-001 | Practice Form | The **Close** button does not close the submission popup    | The Practice Form scenario **fails on purpose** on its last step: it follows the challenge and clicks Close    |
+| BUG-002 | Progress Bar  | **Reset** clicked right at 100% restarts the bar            | The test pauses 1 s at 100% before Reset, as a person would                                                    |
+| BUG-003 | Web Tables    | Deleting **one** new record deletes **all** the new records | The bonus scenario **fails on purpose**: it deletes the 12 records one by one, and the 2nd one is already gone |
 
 ## Continuous integration
 
 The pipeline in `.github/workflows/cypress.yml` runs the whole suite in Chrome on every push and pull request, and can also be started by hand (**Actions → Cypress tests → Run workflow**).
 In CI, a failed test is retried once and videos are recorded. The HTML report, screenshots and videos are attached to each run as the `cypress-results` artifact.
 
-> While BUG-001 is open, the pipeline finishes with one failed scenario (Practice Form), as described above.
+> While BUG-001 and BUG-003 are open, the pipeline finishes with two failed scenarios (Practice Form and the Web Tables bonus), as described above.

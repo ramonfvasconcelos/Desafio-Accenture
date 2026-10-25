@@ -26,6 +26,7 @@ Feature: Web Tables
 
   # Bonus: the 12 records come from the Cucumber data table below.
   # To create more records, just add rows here - no code change is needed.
+  # Known defect BUG-003: a new record cannot be deleted on its own (see docs/bug-reports.md).
   @bonus
   Scenario: Create 12 records dynamically and delete all of them
     When I create the following records:

@@ -67,6 +67,20 @@ class WebTablesPage extends BasePage {
     cy.contains(SELECTORS.rows, record.email).should('not.exist');
   }
 
+  /**
+   * @param {TableRecord} record - the record that must still exist
+   * @param {TableRecord} deletedRecord - the record deleted just before
+   */
+  shouldStillHaveRecord(record, deletedRecord) {
+    this.searchFor(record.email);
+    cy.get('table tbody').should(($body) => {
+      expect(
+        $body.text(),
+        `${record.email} should still be in the table after deleting ${deletedRecord.email}`,
+      ).to.include(record.email);
+    });
+  }
+
   // ---------- helpers ----------
 
   /**
