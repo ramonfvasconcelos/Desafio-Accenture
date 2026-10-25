@@ -29,6 +29,7 @@ Feature: Web Tables
   # Known defect BUG-003: a new record cannot be deleted on its own (see docs/bug-reports.md).
   @bonus
   Scenario: Create 12 records dynamically and delete all of them
+    # Bonus 1. Create 12 new records dynamically through Cucumber
     When I create the following records:
       | First Name | Last Name | Email                  | Age | Salary | Department  |
       | Lucas      | Almeida   | lucas.qa@example.com   | 25  | 4500   | QA          |
@@ -44,5 +45,6 @@ Feature: Web Tables
       | Felipe     | Klein     | felipe.qa@example.com  | 45  | 9500   | Operations  |
       | Renata     | Lima      | renata.qa@example.com  | 30  | 5800   | Compliance  |
     Then all the created records should be displayed in the table
+    # Bonus 2. Delete all the new records created
     When I delete all the created records
     Then none of the created records should be displayed in the table
