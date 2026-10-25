@@ -19,9 +19,16 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install dependencies and run the tests
+      # Fails fast, with a clear message, when demoqa is offline.
+      - name: Health check - is demoqa up?
         uses: cypress-io/github-action@v7
         with:
+          command: npm run test:health
+
+      - name: Run the tests
+        uses: cypress-io/github-action@v7
+        with:
+          install: false
           command: npm run test:ci
 
       - name: Upload the reports and screenshots
